@@ -49,7 +49,7 @@ export function Sidebar() {
   const [moreOpen, setMoreOpen] = useState(false);
 
   return (
-    <aside className="sticky top-0 hidden h-screen shrink-0 flex-col border-r-2 border-line px-3 py-6 md:flex md:w-[88px] xl:w-64 xl:px-4">
+    <aside className="sticky top-0 z-40 hidden h-screen shrink-0 flex-col border-r-2 border-line px-3 py-6 md:flex md:w-[88px] xl:w-64 xl:px-4">
       <Link href="/learn" className="mb-6 px-3 xl:px-4">
         <Logo className="hidden xl:inline" />
         <span className="text-[32px] font-black text-green xl:hidden">d</span>
