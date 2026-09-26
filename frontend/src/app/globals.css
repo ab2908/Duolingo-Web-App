@@ -1,0 +1,426 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ---------------------------------------------------------------------------
+   Design tokens — Duolingo's palette (feather green, macaw blue, cardinal red,
+   bee yellow, fox orange, beetle purple) plus neutral "swan/hare/wolf/eel".
+   --------------------------------------------------------------------------- */
+:root {
+  --green: #58cc02;
+  --green-dark: #58a700;
+  --green-light: #d7ffb8;
+  --green-text: #58a700;
+  --blue: #1cb0f6;
+  --blue-dark: #1899d6;
+  --blue-light: #ddf4ff;
+  --blue-border: #84d8ff;
+  --red: #ff4b4b;
+  --red-dark: #ea2b2b;
+  --red-light: #ffdfe0;
+  --red-text: #ea2b2b;
+  --yellow: #ffc800;
+  --yellow-dark: #e5b400;
+  --orange: #ff9600;
+  --orange-dark: #e58600;
+  --purple: #ce82ff;
+  --purple-dark: #a568cc;
+  --gold: #ffc800;
+
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #f7f7f7;
+  --border: #e5e5e5;
+  --border-strong: #d7d7d7;
+  --ink: #4b4b4b;
+  --ink-strong: #3c3c3c;
+  --ink-muted: #777777;
+  --ink-soft: #afafaf;
+  --locked: #e5e5e5;
+  --locked-dark: #b7b7b7;
+  --locked-icon: #afafaf;
+  --feedback-good: #d7ffb8;
+  --feedback-bad: #ffdfe0;
+  --overlay: rgba(0, 0, 0, 0.5);
+}
+
+:root[data-theme="dark"] {
+  --bg: #131f24;
+  --surface: #131f24;
+  --surface-2: #202f36;
+  --border: #37464f;
+  --border-strong: #37464f;
+  --ink: #f1f7fb;
+  --ink-strong: #f1f7fb;
+  --ink-muted: #dce6ec;
+  --ink-soft: #52656d;
+  --locked: #37464f;
+  --locked-dark: #28363d;
+  --locked-icon: #52656d;
+  --green-text: #79d634;
+  --red-text: #ff7878;
+  --blue-light: #1b3a4a;
+  --blue-border: #3f85a7;
+  --feedback-good: #202f36;
+  --feedback-bad: #202f36;
+  --overlay: rgba(0, 0, 0, 0.7);
+}
+
+@theme inline {
+  --color-green: var(--green);
+  --color-green-dark: var(--green-dark);
+  --color-green-light: var(--green-light);
+  --color-green-text: var(--green-text);
+  --color-blue: var(--blue);
+  --color-blue-dark: var(--blue-dark);
+  --color-blue-light: var(--blue-light);
+  --color-blue-border: var(--blue-border);
+  --color-red: var(--red);
+  --color-red-dark: var(--red-dark);
+  --color-red-light: var(--red-light);
+  --color-red-text: var(--red-text);
+  --color-yellow: var(--yellow);
+  --color-orange: var(--orange);
+  --color-purple: var(--purple);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+  --color-ink: var(--ink);
+  --color-ink-strong: var(--ink-strong);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-soft: var(--ink-soft);
+  --font-sans: var(--font-nunito), var(--font-emoji), ui-rounded, system-ui, sans-serif;
+}
+
+html {
+  color-scheme: light;
+}
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-nunito), var(--font-emoji), ui-rounded, system-ui, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.emoji {
+  font-family: var(--font-emoji), "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+}
+
+@layer components {
+/* ---------------------------------------------------------------------------
+   Buttons — chunky, uppercase, with the signature bottom "lip".
+   --------------------------------------------------------------------------- */
+.btn {
+  --btn-bg: var(--green);
+  --btn-lip: var(--green-dark);
+  --btn-text: #fff;
+  --btn-border: transparent;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 50px;
+  padding: 0 1.25rem;
+  border-radius: 16px;
+  border: 2px solid var(--btn-border);
+  border-bottom-width: 2px;
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  box-shadow: 0 4px 0 var(--btn-lip);
+  transition: filter 0.1s, transform 0.05s, box-shadow 0.05s;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+.btn:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+.btn:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 var(--btn-lip);
+}
+.btn:disabled {
+  --btn-bg: var(--locked);
+  --btn-lip: var(--locked-dark);
+  --btn-text: var(--ink-soft);
+  --btn-border: transparent;
+  cursor: default;
+  box-shadow: none;
+  transform: translateY(4px);
+}
+.btn-blue {
+  --btn-bg: var(--blue);
+  --btn-lip: var(--blue-dark);
+}
+.btn-red {
+  --btn-bg: var(--red);
+  --btn-lip: var(--red-dark);
+}
+.btn-orange {
+  --btn-bg: var(--orange);
+  --btn-lip: var(--orange-dark);
+}
+.btn-purple {
+  --btn-bg: var(--purple);
+  --btn-lip: var(--purple-dark);
+}
+.btn-gold {
+  --btn-bg: var(--yellow);
+  --btn-lip: var(--yellow-dark);
+  --btn-text: #7a5b00;
+}
+.btn-white {
+  --btn-bg: #fff;
+  --btn-lip: rgba(0, 0, 0, 0.18);
+  --btn-text: var(--btn-accent, var(--green));
+}
+.btn-outline {
+  --btn-bg: var(--surface);
+  --btn-lip: var(--border);
+  --btn-text: var(--ink-soft);
+  --btn-border: var(--border);
+}
+.btn-outline-blue {
+  --btn-bg: var(--surface);
+  --btn-lip: var(--border);
+  --btn-text: var(--blue);
+  --btn-border: var(--border);
+}
+.btn-ghost {
+  --btn-bg: transparent;
+  --btn-lip: transparent;
+  --btn-text: var(--blue);
+  box-shadow: none;
+}
+.btn-ghost:active:not(:disabled) {
+  transform: none;
+}
+.btn-sm {
+  min-height: 40px;
+  padding: 0 1rem;
+  font-size: 13px;
+  border-radius: 12px;
+}
+
+/* A selectable card/tile (answer choices, word bank tiles, match pairs). */
+.tile {
+  --tile-border: var(--border);
+  --tile-bg: var(--surface);
+  --tile-text: var(--ink);
+  border: 2px solid var(--tile-border);
+  border-bottom-width: 4px;
+  background: var(--tile-bg);
+  color: var(--tile-text);
+  border-radius: 12px;
+  transition: transform 0.05s, background 0.15s, border-color 0.15s;
+  cursor: pointer;
+  user-select: none;
+}
+.tile:hover:not(:disabled):not([data-state="selected"]) {
+  --tile-bg: var(--surface-2);
+}
+.tile:active:not(:disabled) {
+  transform: translateY(2px);
+  border-bottom-width: 2px;
+}
+.tile[data-state="selected"] {
+  --tile-border: var(--blue-border);
+  --tile-bg: var(--blue-light);
+  --tile-text: var(--blue);
+}
+.tile[data-state="correct"] {
+  --tile-border: #a5ed6e;
+  --tile-bg: var(--green-light);
+  --tile-text: var(--green-dark);
+}
+.tile[data-state="wrong"] {
+  --tile-border: #ffb2b2;
+  --tile-bg: var(--red-light);
+  --tile-text: var(--red-dark);
+}
+.tile[data-state="done"] {
+  --tile-border: var(--border);
+  --tile-bg: var(--surface);
+  --tile-text: var(--ink-soft);
+  opacity: 0.55;
+  cursor: default;
+}
+.tile:disabled {
+  cursor: default;
+}
+
+.card {
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+}
+}
+
+/* ---------------------------------------------------------------------------
+   Animations
+   --------------------------------------------------------------------------- */
+@keyframes bob {
+  0%,
+  100% {
+    transform: translate(-50%, 0);
+  }
+  50% {
+    transform: translate(-50%, -6px);
+  }
+}
+.animate-bob {
+  animation: bob 1.6s ease-in-out infinite;
+}
+
+@keyframes pop-in {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.animate-pop {
+  animation: pop-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.animate-slide-up {
+  animation: slide-up 0.22s ease-out both;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.animate-fade {
+  animation: fade-in 0.2s ease-out both;
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20%,
+  60% {
+    transform: translateX(-6px);
+  }
+  40%,
+  80% {
+    transform: translateX(6px);
+  }
+}
+.animate-shake {
+  animation: shake 0.35s ease-in-out;
+}
+
+@keyframes hop {
+  0%,
+  100% {
+    transform: translateY(0) scale(1, 1);
+  }
+  30% {
+    transform: translateY(-14px) scale(0.97, 1.03);
+  }
+  55% {
+    transform: translateY(0) scale(1.04, 0.96);
+  }
+}
+.animate-hop {
+  animation: hop 0.9s ease-in-out infinite;
+}
+
+@keyframes flicker {
+  0%,
+  100% {
+    transform: scale(1) rotate(-2deg);
+  }
+  50% {
+    transform: scale(1.06) rotate(2deg);
+  }
+}
+.animate-flicker {
+  animation: flicker 1.2s ease-in-out infinite;
+  transform-origin: 50% 90%;
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translate3d(0, -10vh, 0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(var(--drift), 105vh, 0) rotate(var(--spin));
+    opacity: 0.9;
+  }
+}
+
+@keyframes heart-break {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.35);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.animate-heart {
+  animation: heart-break 0.45s ease-out;
+}
+
+@keyframes shine {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(250%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Hide scrollbars on horizontally scrolling rows while keeping them usable. */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
