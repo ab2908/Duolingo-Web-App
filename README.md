@@ -6,7 +6,7 @@ A full-stack clone of the Duolingo web app. It covers the learning path, the les
 - **Backend:** Python 3.11 · FastAPI · SQLAlchemy 2 · Pydantic 2
 - **Database:** SQLite (schema below), seeded automatically on first start
 
-> **Live demo:**duolingo-web-app-lovat.vercel.app· 
+> **Live demo:**duolingo-web-app-lovat.vercel.app
 
 ---
 
