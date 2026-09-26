@@ -125,7 +125,8 @@ export function RightRail() {
       <div className="relative z-20 px-6 pb-2 pt-6">
         <StatsBar />
       </div>
-      <div className="no-scrollbar flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto px-6 pb-6 pt-3">
+      {/* shrink-0 on the cards: let the area scroll rather than squashing them to fit. */}
+      <div className="no-scrollbar flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto px-6 pb-6 pt-3 [&>*]:shrink-0">
         <SuperCard />
         <LeagueCard />
         <QuestsCard />
