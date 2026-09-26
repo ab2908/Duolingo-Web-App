@@ -58,12 +58,12 @@ export function Sidebar() {
         {NAV_ITEMS.map((item) => (
           <NavLink key={item.href} {...item} active={pathname.startsWith(item.href)} />
         ))}
-        <div className="relative" onMouseLeave={() => setMoreOpen(false)}>
+        <div className="relative" onPointerLeave={(e) => e.pointerType === "mouse" && setMoreOpen(false)}>
           <button
             className={`flex h-[52px] w-full items-center gap-5 rounded-xl border-2 px-3 text-[15px] font-extrabold uppercase tracking-wide lg:px-4 ${
               pathname.startsWith("/settings") ? "border-blue-border bg-blue-light text-blue" : "border-transparent text-ink-muted hover:bg-surface-2"
             }`}
-            onMouseEnter={() => setMoreOpen(true)}
+            onPointerEnter={(e) => e.pointerType === "mouse" && setMoreOpen(true)}
             onClick={() => setMoreOpen((o) => !o)}
           >
             <span className="flex w-8 shrink-0 justify-center">

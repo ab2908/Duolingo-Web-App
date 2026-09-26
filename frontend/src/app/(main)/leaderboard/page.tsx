@@ -68,12 +68,15 @@ export default function LeaderboardPage() {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="no-scrollbar flex w-full justify-center gap-3 overflow-x-auto pb-2">
-        {LEAGUES.map((l, i) => (
-          <span key={l.name} className={i === 0 ? "scale-125" : "opacity-40 grayscale"} title={`${l.name} League`}>
-            <ShieldIcon size={46} color={i === 0 ? l.color : "var(--locked-icon)"} />
-          </span>
-        ))}
+      {/* Centred when it fits; scrolls from the current league when it doesn't. */}
+      <div className="no-scrollbar w-full overflow-x-auto">
+        <div className="mx-auto flex w-max gap-3 px-3 py-2">
+          {LEAGUES.map((l, i) => (
+            <span key={l.name} className={`shrink-0 ${i === 0 ? "scale-125" : "opacity-40 grayscale"}`} title={`${l.name} League`}>
+              <ShieldIcon size={46} color={i === 0 ? l.color : "var(--locked-icon)"} />
+            </span>
+          ))}
+        </div>
       </div>
       <h1 className="mt-4 text-2xl font-extrabold text-ink-strong">{board.league} League</h1>
       <p className="mt-1 font-semibold text-ink-muted">Top {board.promotion_zone} advance to the next league</p>

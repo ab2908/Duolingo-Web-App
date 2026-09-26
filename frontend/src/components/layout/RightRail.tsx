@@ -120,20 +120,25 @@ function QuestsCard() {
 
 export function RightRail() {
   return (
-    <aside className="sticky top-0 hidden h-screen w-[368px] shrink-0 flex-col gap-5 overflow-y-auto px-6 py-6 lg:flex">
-      <StatsBar />
-      <SuperCard />
-      <LeagueCard />
-      <QuestsCard />
-      <footer className="flex flex-wrap justify-center gap-x-4 gap-y-2 px-4 pb-4 text-xs font-extrabold uppercase tracking-wide text-ink-soft">
-        <span>About</span>
-        <span>Blog</span>
-        <span>Store</span>
-        <span>Efficacy</span>
-        <span>Careers</span>
-        <span>Terms</span>
-        <span>Privacy</span>
-      </footer>
+    <aside className="sticky top-0 hidden h-screen w-[368px] shrink-0 flex-col lg:flex">
+      {/* The stats bar sits outside the scrolling area so its popovers aren't clipped. */}
+      <div className="relative z-20 px-6 pb-2 pt-6">
+        <StatsBar />
+      </div>
+      <div className="no-scrollbar flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto px-6 pb-6 pt-3">
+        <SuperCard />
+        <LeagueCard />
+        <QuestsCard />
+        <footer className="flex flex-wrap justify-center gap-x-4 gap-y-2 px-4 pb-4 text-xs font-extrabold uppercase tracking-wide text-ink-soft">
+          <span>About</span>
+          <span>Blog</span>
+          <span>Store</span>
+          <span>Efficacy</span>
+          <span>Careers</span>
+          <span>Terms</span>
+          <span>Privacy</span>
+        </footer>
+      </div>
     </aside>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useAppState } from "@/components/AppState";
 import { QuestList } from "@/components/layout/RightRail";
 import { Mascot } from "@/components/Mascot";
@@ -17,6 +18,12 @@ function hoursUntilMidnight(): number {
 export default function QuestsPage() {
   const { me } = useAppState();
   const { data: quests, error, reload } = useApi(api.quests);
+  // Depends on the viewer's clock, so compute it only in the browser (not at build time).
+  const [hoursLeft, setHoursLeft] = useState<number | null>(null);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- read the local clock after hydration
+    setHoursLeft(hoursUntilMidnight());
+  }, []);
 
   return (
     <div className="flex flex-col gap-8">
@@ -29,7 +36,7 @@ export default function QuestsPage() {
       </div>
 
       <section>
-        <SectionTitle action={<span className="font-extrabold text-orange">⏱ {hoursUntilMidnight()} hours</span>}>Daily Quests</SectionTitle>
+        <SectionTitle action={hoursLeft !== null && <span className="font-extrabold text-orange">⏱ {hoursLeft} hours</span>}>Daily Quests</SectionTitle>
         <div className="card p-5">
           {error ? <ErrorState message={error} onRetry={reload} /> : quests ? <QuestList quests={quests} /> : <Spinner />}
         </div>

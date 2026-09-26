@@ -9,30 +9,38 @@ import { api, ApiError } from "@/lib/api";
 import { heartCountdown } from "@/lib/format";
 import { WeekStrip } from "@/components/WeekStrip";
 
-/** Hover (desktop) / tap (touch) popover used by each stat in the top bar. */
-function StatPopover({ trigger, children, align = "center" }: { trigger: ReactNode; children: ReactNode; align?: "center" | "right" }) {
+/**
+ * Hover (mouse) / tap (touch) popover used by each stat in the top bar.
+ * The panel is positioned against the whole bar (see StatsBar's `relative`
+ * root), so it always spans the bar's width and never overflows the rail or
+ * the screen, whichever stat opened it.
+ */
+function StatPopover({ trigger, children }: { trigger: ReactNode; children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!open) return;
-    const close = (e: MouseEvent) => !ref.current?.contains(e.target as Node) && setOpen(false);
-    document.addEventListener("mousedown", close);
-    return () => document.removeEventListener("mousedown", close);
+    const close = (e: PointerEvent) => !ref.current?.contains(e.target as Node) && setOpen(false);
+    document.addEventListener("pointerdown", close);
+    return () => document.removeEventListener("pointerdown", close);
   }, [open]);
 
+  // Hover only for real mice: a tap would otherwise "hover" open and then click closed.
+  const onHover = (value: boolean) => (e: React.PointerEvent) => e.pointerType === "mouse" && setOpen(value);
+
   return (
-    <div ref={ref} className="relative" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
+    <div ref={ref} onPointerEnter={onHover(true)} onPointerLeave={onHover(false)}>
       <button
-        className="flex items-center gap-2 rounded-xl px-2 py-2 font-extrabold hover:bg-surface-2"
+        className={`flex items-center gap-1.5 rounded-xl px-1.5 py-2 font-extrabold hover:bg-surface-2 ${open ? "bg-surface-2" : ""}`}
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
       >
         {trigger}
       </button>
       {open && (
-        <div className={`absolute top-full z-40 pt-2 ${align === "right" ? "right-0" : "left-1/2 -translate-x-1/2"}`}>
-          <div className="animate-pop w-80 rounded-2xl border-2 border-line bg-surface p-5 shadow-xl">{children}</div>
+        <div className="absolute inset-x-0 top-full z-40 flex justify-center pt-2">
+          <div className="animate-pop w-full max-w-sm rounded-2xl border-2 border-line bg-surface p-5 shadow-xl">{children}</div>
         </div>
       )}
     </div>
@@ -59,7 +67,7 @@ export function StatsBar({ compact = false }: { compact?: boolean }) {
   };
 
   return (
-    <div className={`flex items-center justify-between ${compact ? "gap-1" : "gap-2"}`}>
+    <div className={`relative flex items-center justify-between ${compact ? "gap-0.5" : "gap-1"}`}>
       <StatPopover trigger={<FlagES size={32} />}>
         <p className="mb-3 text-xs font-extrabold uppercase tracking-wider text-ink-soft">My courses</p>
         <div className="flex items-center gap-3 rounded-xl bg-blue-light p-3">
@@ -150,7 +158,6 @@ export function StatsBar({ compact = false }: { compact?: boolean }) {
       </StatPopover>
 
       <StatPopover
-        align="right"
         trigger={
           <>
             <HeartIcon size={24} empty={me.hearts === 0} />
